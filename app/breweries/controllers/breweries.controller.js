@@ -1,23 +1,21 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var Brewery = require('../models/brewery.model');
+var mongoose = require('mongoose'),
+    Brewery = require('../models/brewery.model');
 
 exports.findAll = function(req, res) {
-	Brewery.find({}).exec(function(err, breweries) {
-		if (err) {
-			console.error(err);
-			res.status(400).json(err);
-		} else {
-			res.json([]);
-		}
-	})
-}
-
+    Brewery.find({}).exec(function(err, breweries) {
+        if (err) {
+            console.error(err);
+            res.status(400).json(err);
+        } else {
+            res.json(breweries);
+        }
+    });
+};
 exports.find = function(req, res) {
     res.json(req.brewery);
 };
-
 exports.create = function(req, res) {
     var brewery = new Brewery(req.body);
     brewery.save(function(err) {
@@ -33,7 +31,6 @@ exports.create = function(req, res) {
         }
     });
 };
-
 exports.update = function(req, res) {
     var brewery = req.brewery;
     brewery.name = req.body.name;
@@ -51,7 +48,6 @@ exports.update = function(req, res) {
         }
     });
 };
-
 exports.delete = function(req, res) {
     var brewery = req.brewery;
     brewery.remove(function(err) {
@@ -67,7 +63,6 @@ exports.delete = function(req, res) {
         }
     });
 };
-
 exports.breweryById = function(req, res, next, breweryId) {
     if (!mongoose.Types.ObjectId.isValid(breweryId)) {
         res.status(400).json({
