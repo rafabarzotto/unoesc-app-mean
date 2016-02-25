@@ -1,83 +1,81 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Brewery = require('../models/brewery.model');
+    Cliente = require('../models/cliente.model');
 
 exports.findAll = function(req, res) {
-    Brewery.find({}).exec(function(err, breweries) {
+    Cliente.find({}).exec(function(err, clientes) {
         if (err) {
             console.error(err);
             res.status(400).json(err);
         } else {
-            res.json(breweries);
+            res.json(clientes);
         }
     });
 };
 exports.find = function(req, res) {
-    res.json(req.brewery);
+    res.json(req.cliente);
 };
-
 exports.create = function(req, res) {
-    var brewery = new Brewery(req.body);
-    brewery.save(function(err) {
+    var cliente = new Cliente(req.body);
+    cliente.save(function(err) {
         if (err) {
             res.status(400).json({
                 message: err
             });
         } else {
             res.json({
-                message: 'Cervejaria criada com sucesso',
-                brewery: brewery
+                message: 'Cliente criado com sucesso',
+                cliente: cliente
             });
         }
     });
 };
-
 exports.update = function(req, res) {
-    var brewery = req.brewery;
-    brewery.name = req.body.name;
-    brewery.description = req.body.description;
-    brewery.save(function(err) {
+    var cliente = req.cliente;
+    cliente.cod_banco = req.body.cod_banco;
+    cliente.nome = req.body.nome;
+    cliente.login = req.body.login;
+    cliente.ip = req.body.ip;
+    cliente.save(function(err) {
         if (err) {
             res.status(400).json({
                 message: err
             });
         } else {
             res.json({
-                message: 'Cervejaria alterada com sucesso',
-                brewery: brewery
+                message: 'Cliente alterado com sucesso',
+                cliente: cliente
             });
         }
     });
 };
-
 exports.delete = function(req, res) {
-    var brewery = req.brewery;
-    brewery.remove(function(err) {
+    var cliente = req.cliente;
+    cliente.remove(function(err) {
         if (err) {
             res.status(400).json({
                 message: err
             });
         } else {
             res.json({
-                message: 'Cervejaria removida com sucesso',
-                brewery: brewery
+                message: 'Cliente removida com sucesso',
+                cliente: cliente
             });
         }
     });
 };
-
-exports.breweryById = function(req, res, next, breweryId) {
-    if (!mongoose.Types.ObjectId.isValid(breweryId)) {
+exports.clienteById = function(req, res, next, clienteId) {
+    if (!mongoose.Types.ObjectId.isValid(clienteId)) {
         res.status(400).json({
-            message: 'Cervejaria inválida'
+            message: 'Cliente inválido'
         })
     }
-    Brewery.findById(breweryId).exec(function(err, brewery) {
+    Cliente.findById(clienteId).exec(function(err, cliente) {
         if (err) {
             res.status(404).json(err);
         }
-        req.brewery = brewery;
+        req.cliente = cliente;
         next();
     });
 }
